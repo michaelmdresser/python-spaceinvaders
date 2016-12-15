@@ -27,11 +27,13 @@ class Player(pygame.sprite.Sprite):
         self.level = None
 
     def update(self):
-        self.rect.x += self.change_x
+        if self.rect.x > 0 and self.rect.x < SCREENWIDTH - self.image.get_width():
+            self.rect.x += self.change_x
+        elif self.rect.x <= 0:
+            self.rect.x = 1
+        elif self.rect.x >= SCREENWIDTH - self.image.get_width():
+            self.rect.x = SCREENWIDTH - self.image.get_width() - 1
 
-    def shoot(self):
-        pass
-    
     def go_left(self):
         self.change_x = -6
 
@@ -43,7 +45,7 @@ class Player(pygame.sprite.Sprite):
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self):
+    def __init__(self, x, y):
         super().__init__()
 
         width = 5
@@ -52,8 +54,12 @@ class Bullet(pygame.sprite.Sprite):
         self.image.fill(RED)
 
         self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
 
-        self.change_y = 0
+        self.change_y = -5
+
+        level = None
 
     def update(self):
         self.rect.y += self.change_y
@@ -64,17 +70,23 @@ class Level():
     def __init__(self, player):
         self.wall_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
+        self.bullet_list = pygame.sprite.Group()
         self.player = player
 
     def update(self):
         self.wall_list.update()
         self.enemy_list.update()
+        self.bullet_list.update()
 
     def draw(self, screen):
         screen.fill(BLACK)
 
         self.wall_list.draw(screen)
         self.enemy_list.draw(screen)
+        self.bullet_list.draw(screen)
+
+    def player_shoot(self):
+        self.bullet_list.add(Bullet(self.player.rect.x + self.player.image.get_width() / 2, self.player.rect.y))
 
 
 class MainLevel(Level):
@@ -111,10 +123,12 @@ def main():
                 done = True
 
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_LEFT and player.rect.x > 0:
+                if event.key == pygame.K_LEFT:
                     player.go_left()
-                if event.key == pygame.K_RIGHT and player.rect.x < SCREENWIDTH:
+                if event.key == pygame.K_RIGHT:
                     player.go_right()
+                if event.key == pygame.K_SPACE:
+                    current_level.player_shoot()
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and player.change_x < 0:
