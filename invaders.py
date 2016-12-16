@@ -23,6 +23,7 @@ class Player(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
 
         self.change_x = 0
+        self.score = 0
 
         self.level = None
 
@@ -136,7 +137,8 @@ class Level():
             if bullet.rect.y > SCREENHEIGHT:
                bullet.kill() 
 
-        pygame.sprite.groupcollide(self.enemy_list, self.bullet_list, True, True)
+        killdict = pygame.sprite.groupcollide(self.enemy_list, self.bullet_list, True, True)
+        self.player.score += len(killdict)
 
     def draw(self, screen):
         screen.fill(BLACK)
@@ -180,6 +182,8 @@ def main():
     done = False
     clock = pygame.time.Clock()
     pygame.time.set_timer(pygame.USEREVENT + 1, 500)
+    
+    font = pygame.font.SysFont("monospace", 15)
 
     while not done:
         for event in pygame.event.get():
@@ -210,6 +214,8 @@ def main():
 
         current_level.draw(screen)
         active_sprite_list.draw(screen)
+        text = font.render(str(player.score), 1, WHITE)
+        screen.blit(text, (SCREENWIDTH - 30, 30))
 
         clock.tick(60)
 
