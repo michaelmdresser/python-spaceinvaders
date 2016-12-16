@@ -167,7 +167,15 @@ class MainLevel(Level):
     def __init__(self, player):
         Level.__init__(self, player)
 
-        self.wall_list.add(Wall(50, 50, self.bullet_list))
+        # enemies = []
+        enemyRows = 3
+        enemySpacing = 25
+
+        for i in range(enemyRows):
+            for j in range(int((SCREENWIDTH - 100) / enemySpacing)):
+                self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1)*30))
+
+        # self.wall_list.add(Wall(50, 50, self.bullet_list))
         self.enemy_list.add(Enemy(100, 100))
 
 
