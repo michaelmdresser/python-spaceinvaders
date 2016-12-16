@@ -71,7 +71,7 @@ class Bullet(pygame.sprite.Sprite):
 
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, bulletGroup):
         super().__init__()
 
         width = 100
@@ -83,14 +83,18 @@ class Wall(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.health = 100
-        self.bullets = None
+        self.bullets = bulletGroup
 
     def update(self):
-        hit = pygame.sprite.collide_rect(self, self.bullets)
-        if hit:
-            self.health -= 10
+        # hit = pygame.sprite.collide_rect(self, self.bullets)
+        # if hit:
+        #     self.health -= 10
+        for bullet in self.bullets:
+            if pygame.sprite.collide_rect(self, bullet):
+                bullet.kill()
+                self.health -= 20
 
-        if health <= 0:
+        if self.health <= 0:
             self.kill()
 
 class Level():
@@ -124,6 +128,8 @@ class MainLevel(Level):
 
     def __init__(self, player):
         Level.__init__(self, player)
+
+        self.wall_list.add(Wall(50, 50, self.bullet_list))
 
 
 def main():
