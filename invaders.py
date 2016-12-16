@@ -49,6 +49,24 @@ class Player(pygame.sprite.Sprite):
         self.change_x = 0
 
 
+class Enemy(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+
+        width = 10
+        height = 10
+        self.image = pygame.Surface([width, height])
+        self.image.fill(RED)
+
+        self.rect = self.image.get_rect()
+
+        self.rect.x = x
+        self.rect.y = y
+    
+    def update(self):
+        pass
+
+
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -113,6 +131,8 @@ class Level():
             if bullet.rect.y > SCREENHEIGHT:
                bullet.kill() 
 
+        pygame.sprite.groupcollide(self.enemy_list, self.bullet_list, True, True)
+
     def draw(self, screen):
         screen.fill(BLACK)
 
@@ -130,6 +150,7 @@ class MainLevel(Level):
         Level.__init__(self, player)
 
         self.wall_list.add(Wall(50, 50, self.bullet_list))
+        self.enemy_list.add(Enemy(100, 100))
 
 
 def main():
