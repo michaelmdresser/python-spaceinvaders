@@ -136,9 +136,6 @@ class Level():
         self.updates += 1
         reverseEnemies = False
 
-        print(self.updates)
-        print(self.lastReverse)
-        print()
         if (self.updates - self.lastReverse > 60):
             for enemy in self.enemy_list:
                 if enemy.rect.x < 40 or enemy.rect.x > SCREENWIDTH - 40:
