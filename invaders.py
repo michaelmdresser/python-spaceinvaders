@@ -70,6 +70,29 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y += self.change_y
 
 
+class Wall(pygame.sprite.Sprite):
+    def __init__(self, x, y):
+        super().__init__()
+
+        width = 100
+        height = 20
+        self.image = pygame.Surface([width, height])
+        self.image.fill(GREEN)
+        
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+        self.health = 100
+        self.bullets = None
+
+    def update(self):
+        hit = pygame.sprite.collide_rect(self, self.bullets)
+        if hit:
+            self.health -= 10
+
+        if health <= 0:
+            self.kill()
+
 class Level():
 
     def __init__(self, player):
