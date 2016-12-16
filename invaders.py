@@ -1,4 +1,5 @@
 import pygame
+import copy
 
 
 BLACK = (0, 0, 0)
@@ -54,8 +55,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
 
-        width = 10
-        height = 10
+        width = 20
+        height = 20
         self.image = pygame.Surface([width, height])
         self.image.fill(RED)
 
@@ -64,7 +65,7 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-        self.change_x = 5
+        self.change_x = 10
     
     def update(self):
         pass 
@@ -128,14 +129,23 @@ class Level():
         self.enemy_list = pygame.sprite.Group()
         self.bullet_list = pygame.sprite.Group()
         self.player = player
+        self.updates = 0
+        self.lastReverse = 0
 
     def update(self):
-
+        self.updates += 1
         reverseEnemies = False
-        for enemy in self.enemy_list:
-            if enemy.rect.x < 20 or enemy.rect.x > SCREENWIDTH - 20:
-                reverseEnemies = True
-                break
+
+        print(self.updates)
+        print(self.lastReverse)
+        print()
+        if (self.updates - self.lastReverse > 60):
+            for enemy in self.enemy_list:
+                if enemy.rect.x < 40 or enemy.rect.x > SCREENWIDTH - 40:
+                    reverseEnemies = True
+                    self.lastReverse = copy.copy(self.updates)
+                    break
+
 
         if reverseEnemies:
             for enemy in self.enemy_list:
@@ -169,14 +179,13 @@ class MainLevel(Level):
 
         # enemies = []
         enemyRows = 3
-        enemySpacing = 25
+        enemySpacing = 40
 
         for i in range(enemyRows):
-            for j in range(int((SCREENWIDTH - 100) / enemySpacing)):
-                self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1)*30))
+            for j in range(int((SCREENWIDTH - 200) / enemySpacing)):
+                self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1)*50))
 
         # self.wall_list.add(Wall(50, 50, self.bullet_list))
-        self.enemy_list.add(Enemy(100, 100))
 
 
 def main():
