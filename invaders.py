@@ -62,9 +62,14 @@ class Enemy(pygame.sprite.Sprite):
 
         self.rect.x = x
         self.rect.y = y
+
+        self.change_x = 5
     
     def update(self):
-        pass
+        pass 
+
+    def move(self):
+        self.rect.x += self.change_x
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -174,6 +179,7 @@ def main():
 
     done = False
     clock = pygame.time.Clock()
+    pygame.time.set_timer(pygame.USEREVENT + 1, 500)
 
     while not done:
         for event in pygame.event.get():
@@ -193,6 +199,11 @@ def main():
                     player.stop()
                 if event.key == pygame.K_RIGHT and player.change_x > 0:
                     player.stop()
+
+            if event.type == pygame.USEREVENT + 1:
+                for enemy in current_level.enemy_list:
+                    enemy.move()
+
 
         active_sprite_list.update()
         current_level.update()
