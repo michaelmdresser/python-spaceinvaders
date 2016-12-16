@@ -130,6 +130,17 @@ class Level():
         self.player = player
 
     def update(self):
+
+        reverseEnemies = False
+        for enemy in self.enemy_list:
+            if enemy.rect.x < 20 or enemy.rect.x > SCREENWIDTH - 20:
+                reverseEnemies = True
+                break
+
+        if reverseEnemies:
+            for enemy in self.enemy_list:
+                enemy.change_x *= -1
+
         self.wall_list.update()
         self.enemy_list.update()
         self.bullet_list.update()
