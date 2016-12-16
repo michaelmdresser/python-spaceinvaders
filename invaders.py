@@ -27,12 +27,17 @@ class Player(pygame.sprite.Sprite):
         self.level = None
 
     def update(self):
+        '''
         if self.rect.x > 0 and self.rect.x < SCREENWIDTH - self.image.get_width():
             self.rect.x += self.change_x
         elif self.rect.x <= 0:
             self.rect.x = 1
         elif self.rect.x >= SCREENWIDTH - self.image.get_width():
             self.rect.x = SCREENWIDTH - self.image.get_width() - 1
+        '''
+        checkX = self.rect.x + self.change_x
+        if not (checkX < 0 or checkX > SCREENWIDTH - self.image.get_width()):
+                self.rect.x = checkX
 
     def go_left(self):
         self.change_x = -6
@@ -77,6 +82,9 @@ class Level():
         self.wall_list.update()
         self.enemy_list.update()
         self.bullet_list.update()
+        for bullet in self.bullet_list:
+            if bullet.rect.y > SCREENHEIGHT:
+               bullet.kill() 
 
     def draw(self, screen):
         screen.fill(BLACK)
