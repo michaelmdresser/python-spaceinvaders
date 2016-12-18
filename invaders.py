@@ -108,7 +108,7 @@ class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, bulletGroup):
         super().__init__()
 
-        width = 100
+        width = 80
         height = 20
         self.image = pygame.Surface([width, height])
         self.image.fill(GREEN)
@@ -186,12 +186,17 @@ class MainLevel(Level):
         # enemies = []
         enemyRows = 3
         enemySpacing = 40
+        wallCount = 4
 
         for i in range(enemyRows):
             for j in range(int((SCREENWIDTH - 200) / enemySpacing)):
                 self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1)*50))
 
         # self.wall_list.add(Wall(50, 50, self.bullet_list))
+        wallSpacing = (SCREENWIDTH - 100) / (wallCount)
+        for i in range(wallCount):
+            self.wall_list.add(Wall(int((i) * wallSpacing) + 100, (SCREENHEIGHT - 100), self.bullet_list))
+
 
 
 def main():
