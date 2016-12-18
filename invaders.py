@@ -87,7 +87,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-        self.change_y = -5
+        self.change_y = -9
 
         level = None
 
@@ -206,7 +206,7 @@ def main():
 
     done = False
     clock = pygame.time.Clock()
-    pygame.time.set_timer(pygame.USEREVENT + 1, 500)
+    pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
     
     font = pygame.font.SysFont("monospace", 15)
 
