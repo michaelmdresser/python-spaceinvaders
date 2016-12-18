@@ -97,7 +97,7 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
 
-        self.change_y = -9
+        self.change_y = -15
 
         level = None
 
@@ -224,6 +224,7 @@ def main():
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
     
     font = pygame.font.SysFont("monospace", 15)
+    lastShot = 0
 
     while not done:
         for event in pygame.event.get():
@@ -235,8 +236,9 @@ def main():
                     player.go_left()
                 if event.key == pygame.K_RIGHT:
                     player.go_right()
-                if event.key == pygame.K_SPACE:
+                if event.key == pygame.K_SPACE and pygame.time.get_ticks() - lastShot > 700:
                     current_level.player_shoot()
+                    lastShot = pygame.time.get_ticks()
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT and player.change_x < 0:
