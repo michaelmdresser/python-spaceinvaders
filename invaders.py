@@ -7,6 +7,7 @@ WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0, 0, 255)
+DARKORANGE = (255, 140, 0)
 
 SCREENWIDTH = 800
 SCREENHEIGHT = 600
@@ -90,7 +91,7 @@ class Bullet(pygame.sprite.Sprite):
         width = 5
         height = 10
         self.image = pygame.Surface([width, height])
-        self.image.fill(RED)
+        self.image.fill(DARKORANGE)
 
         self.rect = self.image.get_rect()
         self.rect.x = x
