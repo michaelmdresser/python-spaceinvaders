@@ -66,12 +66,21 @@ class Enemy(pygame.sprite.Sprite):
         self.rect.y = y
 
         self.change_x = 10
+
+        self.moveNext = False
+        self.reverseNext = False
     
     def update(self):
-        pass 
+        if self.reverseNext:
+            self.rect.y += 20
+            self.change_x *= -1
+            self.reverseNext = False
+        elif self.moveNext:
+            self.rect.x += self.change_x
+            self.moveNext = False
 
     def move(self):
-        self.rect.x += self.change_x
+        self.moveNext = True
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -131,22 +140,22 @@ class Level():
         self.player = player
         self.updates = 0
         self.lastReverse = 0
+        self.reverseEnemies = False
 
     def update(self):
         self.updates += 1
-        reverseEnemies = False
+        self.reverseEnemies = False
 
         if (self.updates - self.lastReverse > 60):
             for enemy in self.enemy_list:
                 if enemy.rect.x < 40 or enemy.rect.x > SCREENWIDTH - 40:
-                    reverseEnemies = True
+                    self.reverseEnemies = True
                     self.lastReverse = copy.copy(self.updates)
                     break
 
-
-        if reverseEnemies:
+        if self.reverseEnemies:
             for enemy in self.enemy_list:
-                enemy.change_x *= -1
+                enemy.reverseNext = True
 
         self.wall_list.update()
         self.enemy_list.update()
