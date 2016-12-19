@@ -14,7 +14,6 @@ SCREENWIDTH = 800
 SCREENHEIGHT = 600
 
 class Player(pygame.sprite.Sprite):
-    
     def __init__(self):
         super().__init__()
     
@@ -31,14 +30,6 @@ class Player(pygame.sprite.Sprite):
         self.level = None
 
     def update(self):
-        '''
-        if self.rect.x > 0 and self.rect.x < SCREENWIDTH - self.image.get_width():
-            self.rect.x += self.change_x
-        elif self.rect.x <= 0:
-            self.rect.x = 1
-        elif self.rect.x >= SCREENWIDTH - self.image.get_width():
-            self.rect.x = SCREENWIDTH - self.image.get_width() - 1
-        '''
         checkX = self.rect.x + self.change_x
         if not (checkX < 0 or checkX > SCREENWIDTH - self.image.get_width()):
                 self.rect.x = checkX
@@ -128,9 +119,6 @@ class Wall(pygame.sprite.Sprite):
         self.bullets = bulletGroup
 
     def update(self):
-        # hit = pygame.sprite.collide_rect(self, self.bullets)
-        # if hit:
-        #     self.health -= 10
         for bullet in self.bullets:
             if pygame.sprite.collide_rect(self, bullet):
                 bullet.kill()
@@ -139,8 +127,8 @@ class Wall(pygame.sprite.Sprite):
         if self.health <= 0:
             self.kill()
 
-class Level():
 
+class Level():
     def __init__(self, player):
         self.wall_list = pygame.sprite.Group()
         self.enemy_list = pygame.sprite.Group()
@@ -190,11 +178,9 @@ class Level():
 
 
 class MainLevel(Level):
-
     def __init__(self, player):
         Level.__init__(self, player)
 
-        # enemies = []
         enemyRows = 3
         enemySpacing = 40
         wallCount = 4
@@ -203,7 +189,6 @@ class MainLevel(Level):
             for j in range(int((SCREENWIDTH - 200) / enemySpacing)):
                 self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1)*50))
 
-        # self.wall_list.add(Wall(50, 50, self.bullet_list))
         wallSpacing = (SCREENWIDTH - 100) / (wallCount)
         for i in range(wallCount):
             self.wall_list.add(Wall(int((i) * wallSpacing) + 100, (SCREENHEIGHT - 100), self.bullet_list))
@@ -271,7 +256,6 @@ def main():
                 
                 keylist = list(lowestEnemies.keys())
                 randEnemy = lowestEnemies[random.choice(keylist)]
-                # current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
                 if (len(keylist) / random.randint(1, 15)) >= 1:
                     current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
 
@@ -293,6 +277,7 @@ def main():
 
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
