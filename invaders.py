@@ -1,5 +1,6 @@
 import pygame
 import copy
+import random
 
 
 BLACK = (0, 0, 0)
@@ -105,6 +106,12 @@ class Bullet(pygame.sprite.Sprite):
         self.rect.y += self.change_y
 
 
+class EnemyBullet(Bullet):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+        self.change_y *= -1
+
+
 class Wall(pygame.sprite.Sprite):
     def __init__(self, x, y, bulletGroup):
         super().__init__()
@@ -178,6 +185,9 @@ class Level():
     def player_shoot(self):
         self.bullet_list.add(Bullet(self.player.rect.x + self.player.image.get_width() / 2, self.player.rect.y))
 
+    def enemy_shoot(self, x, y):
+        self.bullet_list.add(EnemyBullet(x + 10, y + 25))
+
 
 class MainLevel(Level):
 
@@ -197,7 +207,6 @@ class MainLevel(Level):
         wallSpacing = (SCREENWIDTH - 100) / (wallCount)
         for i in range(wallCount):
             self.wall_list.add(Wall(int((i) * wallSpacing) + 100, (SCREENHEIGHT - 100), self.bullet_list))
-
 
 
 def main():
@@ -222,6 +231,7 @@ def main():
     done = False
     clock = pygame.time.Clock()
     pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
+    pygame.time.set_timer(pygame.USEREVENT + 2, 2000)
     
     font = pygame.font.SysFont("monospace", 15)
     lastShot = 0
@@ -249,6 +259,18 @@ def main():
             if event.type == pygame.USEREVENT + 1:
                 for enemy in current_level.enemy_list:
                     enemy.move()
+
+            if event.type == pygame.USEREVENT + 2:
+                lowestEnemies = {}
+                for enemy in current_level.enemy_list:
+                    if enemy.rect.x not in lowestEnemies:
+                        lowestEnemies[enemy.rect.x] = enemy
+                    else:
+                        if lowestEnemies[enemy.rect.x].rect.y < enemy.rect.y:
+                            lowestEnemies[enemy.rect.x] = enemy
+                
+                randEnemy = lowestEnemies[random.choice(list(lowestEnemies.keys()))]
+                current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
 
 
         active_sprite_list.update()
