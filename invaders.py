@@ -281,6 +281,9 @@ def main():
         text = font.render(str(player.score), 1, WHITE)
         screen.blit(text, (SCREENWIDTH - 30, 30))
 
+        if len(current_level.enemy_list) == 0:
+            current_level = MainLevel(player)
+
         clock.tick(60)
 
         pygame.display.flip()
