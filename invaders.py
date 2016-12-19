@@ -269,8 +269,11 @@ def main():
                         if lowestEnemies[enemy.rect.x].rect.y < enemy.rect.y:
                             lowestEnemies[enemy.rect.x] = enemy
                 
-                randEnemy = lowestEnemies[random.choice(list(lowestEnemies.keys()))]
-                current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
+                keylist = list(lowestEnemies.keys())
+                randEnemy = lowestEnemies[random.choice(keylist)]
+                # current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
+                if (len(keylist) / random.randint(1, 15)) >= 1:
+                    current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
 
 
         active_sprite_list.update()
