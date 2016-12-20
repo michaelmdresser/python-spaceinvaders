@@ -48,8 +48,8 @@ class Enemy(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
 
-        width = 20
-        height = 20
+        width = 40
+        height = 40
         self.image = pygame.Surface([width, height])
         self.image.fill(RED)
 
@@ -181,7 +181,7 @@ class Level():
         self.bullet_list.add(Bullet(self.player.rect.x + self.player.image.get_width() / 2, self.player.rect.y))
 
     def enemy_shoot(self, x, y):
-        self.bullet_list.add(EnemyBullet(x + 10, y + 25))
+        self.bullet_list.add(EnemyBullet(x + 20, y + 45))
 
 
 class MainLevel(Level):
@@ -189,12 +189,12 @@ class MainLevel(Level):
         Level.__init__(self, player)
 
         enemyRows = 3
-        enemySpacing = 40
+        enemySpacing = 60
         wallCount = 4
 
         for i in range(enemyRows):
             for j in range(int((SCREENWIDTH - 200) / enemySpacing)):
-                self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1)*50))
+                self.enemy_list.add(Enemy((j + 1)*enemySpacing, (i + 1) * enemySpacing))
 
         wallSpacing = (SCREENWIDTH - 100) / (wallCount)
         for i in range(wallCount):
@@ -263,7 +263,7 @@ def main():
                 
                 keylist = list(lowestEnemies.keys())
                 randEnemy = lowestEnemies[random.choice(keylist)]
-                if (len(keylist) / random.randint(1, 15)) >= 1:
+                if (len(keylist) / random.randint(1, 10)) >= 1:
                     current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
 
 
