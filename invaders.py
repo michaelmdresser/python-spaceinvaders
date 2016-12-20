@@ -134,6 +134,7 @@ class Level():
         self.enemy_list = pygame.sprite.Group()
         self.bullet_list = pygame.sprite.Group()
         self.player = player
+        self.playerAlive = True
         self.updates = 0
         self.lastReverse = 0
         self.reverseEnemies = False
@@ -162,6 +163,12 @@ class Level():
 
         killdict = pygame.sprite.groupcollide(self.enemy_list, self.bullet_list, True, True)
         self.player.score += len(killdict)
+
+        for bullet in self.bullet_list:
+            if pygame.sprite.collide_rect(self.player, bullet):
+                bullet.kill()
+                self.playerAlive = False
+                break
 
     def draw(self, screen):
         screen.fill(BLACK)
@@ -271,9 +278,17 @@ def main():
         if len(current_level.enemy_list) == 0:
             current_level = MainLevel(player)
 
+        if not current_level.playerAlive:
+            gameover = font.render("Game Over", 1, WHITE)
+            screen.blit(gameover, (SCREENWIDTH / 2, SCREENHEIGHT / 2))
+
         clock.tick(60)
 
         pygame.display.flip()
+        
+        if not current_level.playerAlive:
+            done = True
+            pygame.time.wait(4000)
 
 
     pygame.quit()
