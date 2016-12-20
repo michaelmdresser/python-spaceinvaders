@@ -77,11 +77,9 @@ class Enemy(pygame.sprite.Sprite):
 
 
 class Bullet(pygame.sprite.Sprite):
-    def __init__(self, x, y):
+    def __init__(self, x, y, width = 5, height = 10):
         super().__init__()
 
-        width = 5
-        height = 10
         self.image = pygame.Surface([width, height])
         self.image.fill(DARKORANGE)
 
@@ -99,8 +97,9 @@ class Bullet(pygame.sprite.Sprite):
 
 class EnemyBullet(Bullet):
     def __init__(self, x, y):
-        super().__init__(x, y)
+        super().__init__(x, y, width = 12, height = 25)
         self.change_y *= -1
+        self.change_y /= 1.5 
 
 
 class Wall(pygame.sprite.Sprite):
