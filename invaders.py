@@ -65,7 +65,7 @@ class Enemy(pygame.sprite.Sprite):
     
     def update(self):
         if self.reverseNext:
-            self.rect.y += 20
+            self.rect.y += 50
             self.change_x *= -1
             self.reverseNext = False
         elif self.moveNext:
@@ -144,7 +144,7 @@ class Level():
 
         if (self.updates - self.lastReverse > 60):
             for enemy in self.enemy_list:
-                if enemy.rect.x < 40 or enemy.rect.x > SCREENWIDTH - 40:
+                if enemy.rect.x < 20 or enemy.rect.x > SCREENWIDTH - 60:
                     self.reverseEnemies = True
                     self.lastReverse = copy.copy(self.updates)
                     break
