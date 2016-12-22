@@ -115,7 +115,6 @@ class Wall(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.health = 100
-        self.bullets = bulletGroup
 
     def update(self):
         if self.health <= 0:
@@ -201,6 +200,14 @@ class MainLevel(Level):
             self.wall_list.add(Wall(int((i) * wallSpacing) + 100, (SCREENHEIGHT - 100)))
 
 
+def gameOver(screen, score):
+    font = pygame.font.SysFont("monospace", 40)
+    sadText = font.render("Game Over", 1, WHITE)
+    scoreText = font.render("Score: " + str(score), 1, WHITE)
+    screen.blit(sadText, (SCREENWIDTH / 2, SCREENHEIGHT / 2))
+    screen.blit(scoreText, (SCREENWIDTH / 2, SCREENHEIGHT / 2 + 50))
+
+
 def main():
     pygame.init()
 
@@ -281,18 +288,16 @@ def main():
             current_level.wall_list = wallTemp
 
         if not current_level.playerAlive:
-            gameover = font.render("Game Over", 1, WHITE)
-            screen.blit(gameover, (SCREENWIDTH / 2, SCREENHEIGHT / 2))
+            screen.fill(BLACK)
+            gameOver(screen, player.score)
+            pygame.display.flip()
+            done = True
+            pygame.time.wait(4000)
 
         clock.tick(60)
 
         pygame.display.flip()
         
-        if not current_level.playerAlive:
-            done = True
-            pygame.time.wait(4000)
-
-
     pygame.quit()
 
 
