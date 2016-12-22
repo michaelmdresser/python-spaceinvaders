@@ -103,7 +103,7 @@ class EnemyBullet(Bullet):
 
 
 class Wall(pygame.sprite.Sprite):
-    def __init__(self, x, y, bulletGroup):
+    def __init__(self, x, y):
         super().__init__()
 
         width = 80
@@ -118,11 +118,6 @@ class Wall(pygame.sprite.Sprite):
         self.bullets = bulletGroup
 
     def update(self):
-        for bullet in self.bullets:
-            if pygame.sprite.collide_rect(self, bullet):
-                bullet.kill()
-                self.health -= 20
-
         if self.health <= 0:
             self.kill()
 
@@ -152,6 +147,12 @@ class Level():
         if self.reverseEnemies:
             for enemy in self.enemy_list:
                 enemy.reverseNext = True
+
+        for wall in self.wall_list:
+            for bullet in self.bullet_list:
+                if pygame.sprite.collide_rect(wall, bullet):
+                    bullet.kill()
+                    wall.health -= 20
 
         self.wall_list.update()
         self.enemy_list.update()
@@ -197,7 +198,7 @@ class MainLevel(Level):
 
         wallSpacing = (SCREENWIDTH - 100) / (wallCount)
         for i in range(wallCount):
-            self.wall_list.add(Wall(int((i) * wallSpacing) + 100, (SCREENHEIGHT - 100), self.bullet_list))
+            self.wall_list.add(Wall(int((i) * wallSpacing) + 100, (SCREENHEIGHT - 100)))
 
 
 def main():
@@ -275,7 +276,9 @@ def main():
         screen.blit(text, (SCREENWIDTH - 30, 30))
 
         if len(current_level.enemy_list) == 0:
+            wallTemp = current_level.wall_list
             current_level = MainLevel(player)
+            current_level.wall_list = wallTemp
 
         if not current_level.playerAlive:
             gameover = font.render("Game Over", 1, WHITE)
