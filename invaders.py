@@ -256,23 +256,23 @@ def main():
                     player.stop()
 
             if event.type == pygame.USEREVENT + 1:
+                lowestEnemies = {}
+                if random.randint(1, 2) == 1:
+                    for enemy in current_level.enemy_list:
+                        if enemy.rect.x not in lowestEnemies:
+                            lowestEnemies[enemy.rect.x] = enemy
+                        else:
+                            if lowestEnemies[enemy.rect.x].rect.y < enemy.rect.y:
+                                lowestEnemies[enemy.rect.x] = enemy
+
+                    keylist = list(lowestEnemies.keys())
+                    randEnemy = lowestEnemies[random.choice(keylist)]
+
+                    if (len(keylist) / random.randint(1, 10)) >= 1:
+                        current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
+
                 for enemy in current_level.enemy_list:
                     enemy.move()
-
-            if event.type == pygame.USEREVENT + 2:
-                lowestEnemies = {}
-                for enemy in current_level.enemy_list:
-                    if enemy.rect.x not in lowestEnemies:
-                        lowestEnemies[enemy.rect.x] = enemy
-                    else:
-                        if lowestEnemies[enemy.rect.x].rect.y < enemy.rect.y:
-                            lowestEnemies[enemy.rect.x] = enemy
-                
-                keylist = list(lowestEnemies.keys())
-                randEnemy = lowestEnemies[random.choice(keylist)]
-                if (len(keylist) / random.randint(1, 10)) >= 1:
-                    current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
-
 
         active_sprite_list.update()
         current_level.update()
