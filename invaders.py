@@ -229,8 +229,9 @@ def main():
 
     done = False
     clock = pygame.time.Clock()
-    pygame.time.set_timer(pygame.USEREVENT + 1, 1000)
-    pygame.time.set_timer(pygame.USEREVENT + 2, 2000)
+    pygame.time.set_timer(pygame.USEREVENT + 1, 10)
+    movementThreshold = 1000
+    lastMove = 0
     
     font = pygame.font.SysFont("monospace", 15)
     lastShot = 0
@@ -256,23 +257,26 @@ def main():
                     player.stop()
 
             if event.type == pygame.USEREVENT + 1:
-                lowestEnemies = {}
-                if random.randint(1, 2) == 1:
-                    for enemy in current_level.enemy_list:
-                        if enemy.rect.x not in lowestEnemies:
-                            lowestEnemies[enemy.rect.x] = enemy
-                        else:
-                            if lowestEnemies[enemy.rect.x].rect.y < enemy.rect.y:
+                if pygame.time.get_ticks() - lastMove > movementThreshold:
+                    lastMove = pygame.time.get_ticks()
+                    movementThreshold -= 5
+                    lowestEnemies = {}
+                    if random.randint(1, 2) == 1:
+                        for enemy in current_level.enemy_list:
+                            if enemy.rect.x not in lowestEnemies:
                                 lowestEnemies[enemy.rect.x] = enemy
+                            else:
+                                if lowestEnemies[enemy.rect.x].rect.y < enemy.rect.y:
+                                    lowestEnemies[enemy.rect.x] = enemy
 
-                    keylist = list(lowestEnemies.keys())
-                    randEnemy = lowestEnemies[random.choice(keylist)]
+                        keylist = list(lowestEnemies.keys())
+                        randEnemy = lowestEnemies[random.choice(keylist)]
 
-                    if (len(keylist) / random.randint(1, 10)) >= 1:
-                        current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
+                        if (len(keylist) / random.randint(1, 10)) >= 1:
+                            current_level.enemy_shoot(randEnemy.rect.x, randEnemy.rect.y)
 
-                for enemy in current_level.enemy_list:
-                    enemy.move()
+                    for enemy in current_level.enemy_list:
+                        enemy.move()
 
         active_sprite_list.update()
         current_level.update()
